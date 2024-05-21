@@ -1,6 +1,6 @@
 <?php
 include "./sesja.php";
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['login'])) {
     header("Location: login.php");
     exit();
 }
@@ -17,7 +17,14 @@ if (!isset($_SESSION['user'])) {
 </head>
 <body>
 
-<?php include("./components/navbar.php") ?>
+<?php
+include("./components/header.php");
+?>
+
+
+<?php
+include("./components/navbar.php");
+?>
 
 </body>
 </html>

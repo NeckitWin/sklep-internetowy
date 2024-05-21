@@ -1,8 +1,28 @@
 <?php
-require "./sesja.php";
-include "./database.php";
-global $conn;
-$error = "error";
+include "./sesja.php";
+include "./class/database.php";
+include "./class/Login.php";
+
+$db = new Database();
+$conn = $db->getConnection();
+$error = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $user = new Login($conn);
+    $login = $_POST["login"];
+    $password = $_POST["password"];
+    $rpassword = $_POST["rpassword"];
+    $error = $user->register($login, $password, $rpassword);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    if (isset($_GET["login"]) && isset($_GET["password"])) {
+        $user = new Login($conn);
+        $login = $_GET["login"];
+        $password = $_GET["password"];
+        $error = $user->login($login, $password);
+    }
+}
 ?>
 <!doctype html>
 <html lang="pl">
@@ -17,22 +37,29 @@ $error = "error";
 </head>
 <body>
 
+<?php
+    include "./components/header.php";
+?>
+
 <main>
-    <div class="login">
-        <form method="post">
-            <h3>Zarejestrować się</h3>
-            <input type="text" placeholder="Login" minlength="3" maxlength="32" required>
-            <input type="password" name="password" placeholder="Hasło" minlength="8" maxlength="64" required>
-            <input type="password" name="rpassword" placeholder="Powtórz hasło" minlength="8" maxlength="64" required>
-            <input type="submit">
-        </form>
-        <form method="get">
-            <h3>Zalogować się</h3>
-            <input type="text" placeholder="Login" minlength="3" maxlength="32" required>
-            <input type="password" name="password" placeholder="Hasło" minlength="8" maxlength="64" required>
-            <input type="submit">
-        </form>
-        <p class="error"><?php $error ?></p>
+    <div class="login_frame">
+        <div class="login">
+            <form method="post">
+                <h3>Zarejestrować się</h3>
+                <input type="text" name="login" placeholder="Login" minlength="3" maxlength="32" required>
+                <input type="password" name="password" placeholder="Hasło" minlength="8" maxlength="64" required>
+                <input type="password" name="rpassword" placeholder="Powtórz hasło" minlength="8" maxlength="64"
+                       required>
+                <input type="submit">
+            </form>
+            <form method="get">
+                <h3>Zalogować się</h3>
+                <input type="text" name="login" placeholder="Login" minlength="3" maxlength="32" required>
+                <input type="password" name="password" placeholder="Hasło" minlength="8" maxlength="64" required>
+                <input type="submit">
+            </form>
+        </div>
+        <p class="error"><?php echo $error ?></p>
     </div>
 </main>
 
@@ -40,30 +67,3 @@ $error = "error";
 
 </body>
 </html>
-
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['login']) || !isset($_POST['password']) || !isset($_POST['rpassword'])) {
-        $error = "Wypełnij wszystkie pola";
-    }
-    // Проверка, на sql инъекции
-    if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $_POST['login'])) {
-        return  $error = "Login zawiera niedozwolone znaki";
-    }
-
-    $login = $_POST['login'];
-    $password = $_POST['password'];
-    $rpassword = $_POST['rpassword'];
-
-    if ($password !== $rpassword) {
-        $error = "Hasła nie są takie same";
-    } else {
-        $sql = "INSERT INTO users (login, password) VALUES ('$login', '$password')";
-        if ($conn->query($sql)) {
-            $error = "Zarejestrowano pomyślnie";
-        } else {
-            $error = "Błąd podczas rejestracji";
-        }
-    }
-}
-?>

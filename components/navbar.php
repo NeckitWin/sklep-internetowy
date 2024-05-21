@@ -6,25 +6,26 @@ $icon_main = '<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" id=
 $icon_profile = '<svg  width="32" height="32" xmlns="http://www.w3.org/2000/svg" id="Isolation_Mode" data-name="Isolation Mode" viewBox="0 0 24 24"><path d="M21,24H18V19a2,2,0,0,0-2-2H8a2,2,0,0,0-2,2v5H3V19a5.006,5.006,0,0,1,5-5h8a5.006,5.006,0,0,1,5,5Z"/><path d="M12,12a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,12Zm0-9a3,3,0,1,0,3,3A3,3,0,0,0,12,3Z"/></svg>';
 $icon_exit = '<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24"><path d="m24,15c0,.617-.24,1.197-.678,1.634l-2.072,2.073c-.195.195-.451.293-.707.293s-.512-.098-.707-.293c-.391-.391-.391-1.023,0-1.414l1.292-1.293h-6.128c-.553,0-1-.447-1-1s.447-1,1-1h6.128l-1.292-1.293c-.391-.391-.391-1.023,0-1.414s1.023-.391,1.414,0l2.073,2.074c.437.436.677,1.016.677,1.633Zm-10-4v-5c0-1.103-.897-2-2-2h0s0,0,0,0v17.999h1c.552,0,1-.448,1-1v-2c0-.553.447-1,1-1s1,.447,1,1v2c0,1.654-1.346,3-3,3H3c-1.654,0-3-1.346-3-3V5.621C0,3.246,1.69,1.184,4.019.718L7.216.079c1.181-.236,2.391.066,3.321.829.375.307.665.685.902,1.092h.561c2.206,0,4,1.794,4,4v5c0,.553-.447,1-1,1s-1-.447-1-1Zm-5,1.5c0-.828-.672-1.5-1.5-1.5s-1.5.672-1.5,1.5.672,1.5,1.5,1.5,1.5-.672,1.5-1.5Z"/></svg>';
 $icon_login = '<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24"><path d="m24,12c0,.829-.671,1.5-1.5,1.5h-11.853l1.921,1.946c.582.59.575,1.54-.014,2.122-.292.288-.673.432-1.054.432-.387,0-.774-.149-1.068-.446l-3.743-3.793c-.967-.968-.967-2.554.007-3.528l3.735-3.786c.582-.591,1.532-.595,2.122-.014.589.582.596,1.532.014,2.122l-1.921,1.946h11.853c.829,0,1.5.671,1.5,1.5Zm-2.268,4.223c-.705-.433-1.629-.214-2.064.491-1.653,2.684-4.52,4.287-7.668,4.287-4.962,0-9-4.038-9-9S7.038,3,12,3c3.148,0,6.015,1.603,7.668,4.287.435.706,1.359.925,2.064.491.706-.435.925-1.359.491-2.064C20.019,2.136,16.197,0,12,0,5.383,0,0,5.383,0,12s5.383,12,12,12c4.197,0,8.019-2.136,10.223-5.713.434-.705.215-1.629-.491-2.064Z"/></svg>';
+
+$links = [
+    'cart.php' => $icon_cart,
+    'like.php' => $icon_like,
+    'index.php' => $icon_main,
+    'profile.php' => $icon_profile,
+    'login.php' => isset($_SESSION['login']) ? $icon_exit : $icon_login,
+];
+
 ?>
 
 <link rel="stylesheet" href="./components/styles/navbar.css">
 <footer class="navbar">
     <nav>
         <ul class="navbar_links">
-            <li><a href="cart.php"><?php echo $icon_cart; ?></a></li>
-            <li><a href="like.php"><?php echo $icon_like; ?></a></li>
-            <li><a href="index.php"><?php echo $icon_main; ?></a></li>
-            <li><a href="profile.php"><?php echo $icon_profile; ?></a></li>
-            <li>
-                <?php
-                if (!isset($_SESSION['login'])) {
-                    echo "<a href='login.php'>{$icon_login}</a>";
-                } else {
-                    echo "<a href='logout.php'>{$icon_exit}</a>";
-                }
-                ?>
-            </li>
+            <?php foreach ($links as $link => $icon) : ?>
+                <li<?= basename($_SERVER['PHP_SELF']) === $link ? ' class="active"' : '' ?>>
+                    <a href="<?= $link ?>"><?= $icon ?></a>
+                </li>
+            <?php endforeach; ?>
         </ul>
     </nav>
 </footer>

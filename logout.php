@@ -1,5 +1,7 @@
 <?php
 include "./sesja.php";
+session_destroy();
+header("Location: index.php");
 ?>
 <!doctype html>
 <html lang="pl">

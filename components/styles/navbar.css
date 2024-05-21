@@ -29,12 +29,15 @@
 .navbar_links li:hover {
     transform: scale(1.5) translateY(-20px);
     border-radius: 50%;
-}
-
-.navbar_links li:hover {
     box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.1);
 }
 
 .navbar_links li:hover svg {
     fill: #f6f6f6;
+}
+
+.active {
+    transform: scale(1.5) translateY(-20px);
+    border-radius: 50%;
+    box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.1);
 }
