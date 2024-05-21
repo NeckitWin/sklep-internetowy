@@ -1,0 +1,40 @@
+.profile_frame {
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile {
+    padding: 20px;
+    background-color: #636AD9;
+    color: #ffffff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+
+.avatar {
+    height: 200px;
+    border-radius: 20px;
+}
+
+.info ul {
+    list-style: none;
+    padding: 10px;
+}
+
+.func input[type="submit"] {
+    background-color: #a0fff2;
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 1);
+    cursor: pointer;
+    transition: 0.3s ease;
+    margin: 10px auto;
+}
+
+.func input[type="submit"]:hover {
+    transform: translateY(-1px);
+}

@@ -50,13 +50,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 <input type="password" name="password" placeholder="Hasło" minlength="8" maxlength="64" required>
                 <input type="password" name="rpassword" placeholder="Powtórz hasło" minlength="8" maxlength="64"
                        required>
-                <input type="submit">
+                <input type="submit" value="Zarejestruj">
             </form>
             <form method="get">
                 <h3>Zalogować się</h3>
                 <input type="text" name="login" placeholder="Login" minlength="3" maxlength="32" required>
                 <input type="password" name="password" placeholder="Hasło" minlength="8" maxlength="64" required>
-                <input type="submit">
+                <input type="submit" value="Zaloguj">
             </form>
         </div>
         <p class="error"><?php echo $error ?></p>

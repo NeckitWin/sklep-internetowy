@@ -6,4 +6,6 @@
     justify-content: space-around;
     align-items: center;
     padding: 4px;
+    position: fixed;
+    top: 0;
 }

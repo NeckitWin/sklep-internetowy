@@ -11,9 +11,11 @@ $links = [
     'cart.php' => $icon_cart,
     'like.php' => $icon_like,
     'index.php' => $icon_main,
-    'profile.php' => $icon_profile,
-    'login.php' => isset($_SESSION['login']) ? $icon_exit : $icon_login,
+    'profile.php' => $icon_profile
 ];
+
+$authLink = isset($_SESSION['login']) ? 'logout.php' : 'login.php';
+$authIcon = isset($_SESSION['login']) ? $icon_exit : $icon_login;
 
 ?>
 
@@ -26,6 +28,9 @@ $links = [
                     <a href="<?= $link ?>"><?= $icon ?></a>
                 </li>
             <?php endforeach; ?>
+            <li<?= basename($_SERVER['PHP_SELF']) === $authLink ? ' class="active"' : '' ?>>
+                <a href="<?= $authLink ?>"><?= $authIcon ?></a>
+            </li>
         </ul>
     </nav>
 </footer>
