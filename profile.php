@@ -1,30 +1,38 @@
 <?php
 include "./sesja.php";
 include "./class/database.php";
+include "./class/Profile.php";
+$error = "";
+
 if (!isset($_SESSION['login'])) {
     header("Location: login.php");
     exit();
-} else {
-    $db = new Database();
-    $conn = $db->getConnection();
-    $sql = "SELECT * FROM `users` WHERE username = '" . $_SESSION['login'] . "';";
-    $result = $conn->query($sql);
-    $row = $result->fetch_assoc();
-    $username = $row['username'];
-    $role = $row['role'];
-    $money = $row['money'];
-    $conn->close();
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $db = new Database();
     $conn = $db->getConnection();
-    $sql = "UPDATE `users` SET role = 'Sprzedawca' WHERE username = '" . $_SESSION['login'] . "';";
-    $conn->query($sql);
-    $conn->close();
-    header("Location: profile.php");
-    exit();
+    $Profile = new Profile($conn);
+
+    if (isset($_POST["seller"])) {
+        $error = $Profile->setSeller($_SESSION['login']);
+    }
+
+    if (isset($_POST["money"]) && isset($_POST["addMoney"])) {
+        $error = $Profile->addMoney($_SESSION['login'], $_POST["money"]);
+    }
 }
+
+$db = new Database();
+$conn = $db->getConnection();
+$sql = "SELECT * FROM `users` WHERE username = '" . $_SESSION['login'] . "';";
+$result = $conn->query($sql);
+$row = $result->fetch_assoc();
+$username = $row['username'];
+$role = $row['role'];
+$money = $row['money'];
+$conn->close();
+
 ?>
 <!doctype html>
 <html lang="pl">
@@ -52,14 +60,18 @@ include("./components/header.php");
                     <?php
                     echo "<li>Login: " . $username . "</li>";
                     echo "<li>Rola: " . $role . "</li>";
-                    echo "<li>Pieniądze: " . $money . "</li>";
+                    echo "<li>Pieniądze: " . $money . "zł</li>";
+                    echo "<li class='error'>" . $error . "</li>"
                     ?>
                 </ul>
             </div>
             <div class="func">
-                <h3>Towary użytkownika</h3>
+                <h3>Profil użytkownika</h3>
                 <form method="post">
-                    <input type="submit" value="Zostać sprzedawcą">
+                    <input type="number" name="money" placeholder="Kwota" max="100000000">
+                    <input type="submit" name="addMoney" value="Doładuj konto"></br>
+                    <?php
+                    if ($role != "Sprzedawca" && $role != "Admin") echo '<input type = "submit" name = "seller" value = "Zostań sprzedawcą" ></br>'; ?>
                 </form>
             </div>
         </div>

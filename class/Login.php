@@ -30,13 +30,12 @@ class Login
 
         $stmt->close();
 
-        $sql = "INSERT INTO `users` (username, password, role) VALUES (?, ?, 'user')";
+        $sql = "INSERT INTO `users` (username, password, role) VALUES (?, ?, 'Użytkownik')";
         $stmt = $this->conn->prepare($sql);
         if ($stmt === false) {
             return "Błąd przy rejestracji: " . $this->conn->error;
         }
 
-        // Hashowanie hasła
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt->bind_param("ss", $login, $hashedPassword);

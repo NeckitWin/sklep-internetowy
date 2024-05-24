@@ -3,6 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .profile {
@@ -23,16 +24,26 @@
 .info ul {
     list-style: none;
     padding: 10px;
+    font-weight: bold;
+}
+
+.func input[type="number"], .func input[type="text"]{
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 1);
+    margin-right: 10px;
 }
 
 .func input[type="submit"] {
-    background-color: #a0fff2;
+    background-color: #4597DA;
     padding: 5px 10px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 1);
     cursor: pointer;
     transition: 0.3s ease;
     margin: 10px auto;
+    color: #fff;
+    font-weight: bold;
 }
 
 .func input[type="submit"]:hover {
