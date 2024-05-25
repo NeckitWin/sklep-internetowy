@@ -1,0 +1,34 @@
+main {
+    width: 100%;
+}
+
+.towary {
+    padding: 10px;
+    height: 400px;
+    width: 1000px;
+    background-color: rgba(99, 106, 217, 0.1);
+    margin: 50px auto;
+}
+
+.towary form {
+    background-color: rgba(99, 106, 217, 0.5);
+    max-width: max-content;
+    padding: 4px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.towary img {
+    width: 200px;
+    height: 120px;
+}
+
+.towary ul {
+    list-style-type: none;
+    display: flex;
+    gap: 10px;
+}
+
+.towar_info li {
+    text-align: center;
+}

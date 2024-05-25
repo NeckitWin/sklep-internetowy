@@ -31,7 +31,7 @@
     padding: 5px 10px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 1);
-    margin-right: 10px;
+    margin: 5px 10px 5px 0;
 }
 
 .func input[type="submit"] {
@@ -41,7 +41,7 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 1);
     cursor: pointer;
     transition: 0.3s ease;
-    margin: 10px auto;
+    margin: 5px auto;
     color: #fff;
     font-weight: bold;
 }
