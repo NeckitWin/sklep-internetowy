@@ -1,5 +1,6 @@
 main {
     width: 100%;
+    margin-bottom: 200px;
 }
 
 .frame {
@@ -19,18 +20,58 @@ main {
 
 .polubione form {
     width: 100%;
-    height: 80px;
+    height: 120px;
     background-color: rgba(99, 106, 217, 0.5);
     border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
 }
 
-/*h1*/
+.polubione img {
+    height: 100%;
+    width: 280px;
+    border-radius: 10px 0 0 10px;
+}
+/*przyciski*/
+.przyciski {
+    display: flex;
+    flex-direction: column;
+}
+
+.przyciski button {
+    font-size: 18px;
+    height: 60px;
+    width: 200px;
+    border: 1px solid rgba(99, 106, 217, 0.5);
+    background-color: rgba(69, 151, 218, 0.9);
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-weight: bold;
+}
+
+.przyciski button:hover {
+    box-shadow: 0 0 10px rgba(99, 106, 217, 0.5);
+    transform: translateX(2px);
+}
+
+.przyciski button:first-child {
+    border-radius: 0 10px 0 0;
+}
+
+.przyciski button:last-child {
+    border-radius: 0 0 10px 0;
+}
+
+/*h1 animation*/
 .beauh {
     animation: beau 2s infinite;
 }
 
 @keyframes beau {
-    0% {color: #CCCDD8}
+    0% {color: #CCCDD8;}
     50% {color: #323232;}
-    100% {color: #CCCDD8}
+    100% {color: #CCCDD8;}
 }

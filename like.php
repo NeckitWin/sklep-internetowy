@@ -1,5 +1,11 @@
 <?php
 include "./sesja.php";
+include "./class/database.php";
+include "./class/Like.php";
+
+$db = new Database();
+$conn = $db->getConnection();
+$like = new Like($conn);
 ?>
 <!doctype html>
 <html lang="pl">
@@ -22,11 +28,13 @@ include("./components/header.php");
     <div class="frame">
         <h1 class="beauh">Towary polubione</h1>
         <div class="polubione">
-            <form method="POST">
-                <img src="https://tappy.pl/wp-content/uploads/2021/08/AdobeStock_405028138-Kopiowanie.jpeg" alt="drzewo">
-            </form>
-            <form method="POST"></form>
-            <form method="POST"></form>
+            <?php
+                if (isset($_SESSION['login'])) {
+                    echo $like->displayFavoriteLIKE($_SESSION['login']);
+                } else {
+                    echo "Musisz się załogować, żeby korzystać z tej funkcji";
+                }
+            ?>
         </div>
     </div>
 </main>
