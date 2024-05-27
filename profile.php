@@ -60,7 +60,10 @@ include("./components/header.php");
     <div class="profile_frame">
         <div class="profile">
             <div class="info">
-                <img src="./public/avatar/example.png" alt="profile picture" class="avatar">
+                <?php
+                if (isset($row['avatar'])) echo "<img src='{$row['avatar']}' alt='profile picture' class='avatar'>";
+                else echo "<img src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' alt='profile picture' class='avatar'>";
+                ?>
                 <ul>
                     <?php
                     echo "<li>Login: " . $username . "</li>";

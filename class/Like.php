@@ -11,15 +11,23 @@ class Like
 
     public function displayFavoriteLIKE($user)
     {
-        $sql = "SELECT like_id, nazwa, cena, ilosc, img FROM `like` 
+        $sql = "SELECT towary.towar_id, like_id, nazwa, cena, ilosc, img FROM `like` 
 INNER JOIN users ON like.user_id=users.id 
 INNER JOIN towary ON like.towar_id=towary.towar_id
-WHERE user_id = (SELECT id FROM users WHERE username = '{$user}')";
+WHERE user_id = (SELECT id FROM users WHERE username = ?)";
 
-        $result = $this->conn->query($sql);
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            die("Bląd sql: " . $this->conn->errno . $this->conn->error);
+        }
+        $stmt->bind_param("s", $user);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
         while ($row = $result->fetch_assoc()) {
             echo "
             <form method='POST'>
+                <input type='hidden' name='towar_id' value='{$row['towar_id']}'>
                 <img src='{$row['img']}' alt='{$row['nazwa']}'>
                 <h2>{$row['nazwa']}</h2>
                 <h2>Cena: {$row['cena']}</h2>
@@ -31,6 +39,7 @@ WHERE user_id = (SELECT id FROM users WHERE username = '{$user}')";
             </form>
             ";
         }
+        $stmt->close();
     }
 
     public function addCart($user, $towar_id)
