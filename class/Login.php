@@ -35,7 +35,6 @@ class Login
         if ($stmt === false) {
             return "Błąd przy rejestracji: " . $this->conn->error;
         }
-
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt->bind_param("ss", $login, $hashedPassword);

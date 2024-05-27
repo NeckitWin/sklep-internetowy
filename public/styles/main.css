@@ -4,31 +4,94 @@ main {
 
 .towary {
     padding: 10px;
-    height: 400px;
-    width: 1000px;
+    max-width: 1320px;
     background-color: rgba(99, 106, 217, 0.1);
     margin: 50px auto;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .towary form {
     background-color: rgba(99, 106, 217, 0.5);
     max-width: max-content;
     padding: 4px;
-    border-radius: 10px;
+    border-radius: 5px;
     color: #fff;
+    height: max-content;
 }
 
 .towary img {
+    background-size: cover;
     width: 200px;
-    height: 120px;
+    height: 130px;
+    border-radius: 5px;
+}
+
+.towary>form>p {
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: max-height 1s ease;
+    max-height: 20px;
+}
+
+.towary>form:hover>p {
+    max-height: 100px;
+    overflow: visible;
+    white-space: normal;
 }
 
 .towary ul {
     list-style-type: none;
     display: flex;
     gap: 10px;
+    box-shadow: 0 0 1px 0 #fff;
+    width: 200px;
 }
 
-.towar_info li {
-    text-align: center;
+.przyciski {
+    padding: 3px 0 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buy {
+    width: max-content;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: #4597DA;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 1px 4px;
+    transition: 0.3s ease;
+    font-size: 17px;
+}
+
+.like {
+    background-color: rgba(0,0,0,0);
+    border: none;
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 2px;
+    background-image: url("https://static-00.iconduck.com/assets.00/white-heart-emoji-2048x1835-ni3jff5l.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: 0.3s ease;
+}
+
+.buy:hover {
+    transform: translateX(2px);
+    background-color: #cf5600;
+}
+
+.like:hover {
+    transform: rotate(360deg) scale(1.3);
 }
