@@ -46,16 +46,21 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         <div class="login">
             <form method="post">
                 <h3>Zarejestrować się</h3>
-                <input type="text" name="login" placeholder="Login" minlength="3" maxlength="32" required>
-                <input type="password" name="password" placeholder="Hasło" minlength="8" maxlength="64" required>
+                <input type="text" name="login" placeholder="Login" minlength="3" maxlength="32"
+                       pattern="^[a-zA-Z0-9]*$" title="Login can only contain letters and numbers." required>
+                <input type="password" name="password" placeholder="Hasło" minlength="8" maxlength="64"
+                       pattern="^[a-zA-Z0-9@#\$%\^&\*\(\)\-_+=!\?]*$" title="Password can contain letters, numbers, and special characters @#\$%^&*()-_+=!?" required>
                 <input type="password" name="rpassword" placeholder="Powtórz hasło" minlength="8" maxlength="64"
-                       required>
+                       pattern="^[a-zA-Z0-9@#\$%\^&\*\(\)\-_+=!\?]*$" title="Password can contain letters, numbers, and special characters @#\$%^&*()-_+=!?" required>
                 <input type="submit" value="Zarejestruj">
             </form>
+
             <form method="get">
                 <h3>Zalogować się</h3>
-                <input type="text" name="login" placeholder="Login" minlength="3" maxlength="32" required>
-                <input type="password" name="password" placeholder="Hasło" minlength="8" maxlength="64" required>
+                <input type="text" name="login" placeholder="Login" minlength="3" maxlength="32"
+                       pattern="^[a-zA-Z0-9]*$" title="Login can only contain letters and numbers." required>
+                <input type="password" name="password" placeholder="Hasło" minlength="8" maxlength="64"
+                       pattern="^[a-zA-Z0-9@#\$%\^&\*\(\)\-_+=!\?]*$" title="Password can contain letters, numbers, and special characters @#\$%^&*()-_+=!?" required>
                 <input type="submit" value="Zaloguj">
             </form>
         </div>

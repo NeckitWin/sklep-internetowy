@@ -11,10 +11,7 @@ class Like
 
     public function displayFavoriteLIKE($user)
     {
-        $sql = "SELECT like_id, nazwa, cena, ilosc, img FROM `like` 
-INNER JOIN users ON like.user_id=users.id 
-INNER JOIN towary ON like.towar_id=towary.towar_id
-WHERE user_id = (SELECT id FROM users WHERE username = ?)";
+        $sql = "CALL GetFavorite(?)";
 
         $stmt = $this->conn->prepare($sql);
         if ($stmt === false) {
@@ -26,7 +23,7 @@ WHERE user_id = (SELECT id FROM users WHERE username = ?)";
 
         while ($row = $result->fetch_assoc()) {
             echo "
-            <form method='POST'>
+            <form method='POST' class='towary'>
                 <input type='hidden' name='like_id' value='{$row['like_id']}'>
                 <img src='{$row['img']}' alt='{$row['nazwa']}'>
                 <h2>{$row['nazwa']}</h2>
@@ -46,47 +43,52 @@ WHERE user_id = (SELECT id FROM users WHERE username = ?)";
     {
         $ilosc = 1;
 
-        $sqlcheck = "SELECT * FROM `koszyk` WHERE user_id = (SELECT id FROM users WHERE username = ?) AND towar_id = (SELECT towar_id FROM `like` WHERE like_id = ?)";
-        $stmtCheck = $this->conn->prepare($sqlcheck);
-        $stmtCheck->bind_param("ss", $user, $like_id);
-        $stmtCheck->execute();
-        $resultCheck = $stmtCheck->get_result();
-        if ($resultCheck->num_rows > 0) {
-            return "Towar już jest w koszyku!";
+        $this->conn->begin_transaction();
+
+        try {
+            $sqlcheck = "SELECT * FROM `koszyk` WHERE user_id = (SELECT id FROM users WHERE username = ?) AND towar_id = (SELECT towar_id FROM `like` WHERE like_id = ?)";
+            $stmtCheck = $this->conn->prepare($sqlcheck);
+            $stmtCheck->bind_param("ss", $user, $like_id);
+            $stmtCheck->execute();
+            $resultCheck = $stmtCheck->get_result();
+            if ($resultCheck->num_rows > 0) {
+                throw new Exception("Towar już jest w koszyku!");
+            }
+            $stmtCheck->close();
+
+            $sqladd = "INSERT INTO `koszyk` (user_id, towar_id, ilosc) VALUES ((SELECT id FROM users WHERE username=?),(SELECT towar_id FROM `like` WHERE like_id = ?),?)";
+            $stmt = $this->conn->prepare($sqladd);
+            $stmt->bind_param("sss", $user, $like_id, $ilosc);
+            $stmt->execute();
+            if ($stmt->error) {
+                throw new Exception("Bląd sql: " . $this->conn->errno . $this->conn->error);
+            }
+            $stmt->close();
+
+            $sqldeletefromlike = "DELETE FROM `like` WHERE like_id=?";
+            $stmtDeleteLike = $this->conn->prepare($sqldeletefromlike);
+            $stmtDeleteLike->bind_param("s",$like_id);
+            $stmtDeleteLike->execute();
+            if ($stmtDeleteLike->error) {
+                throw new Exception("Bląd sql: " . $this->conn->errno . $this->conn->error);
+            }
+            $stmtDeleteLike->close();
+
+            $sqldeletefromshop = "UPDATE towary SET ilosc=ilosc-? WHERE towar_id = (SELECT towar_id FROM `like` WHERE like_id = ?)";
+            $stmtDeleteShop = $this->conn->prepare($sqldeletefromshop);
+            $stmtDeleteShop->bind_param("ss", $ilosc, $like_id);
+            $stmtDeleteShop->execute();
+            if ($stmtDeleteShop->error) {
+                throw new Exception("Bląd sql: " . $this->conn->errno . $this->conn->error);
+            }
+            $stmtDeleteShop->close();
+
+            $this->conn->commit();
+            return "Towar został dodany do koszyka!";
+        } catch (Exception $e) {
+            $this->conn->rollback();
+            return $e->getMessage();
         }
-        $stmtCheck->close();
-
-        $sqladd = "INSERT INTO `koszyk` (user_id, towar_id, ilosc) VALUES ((SELECT id FROM users WHERE username=?),(SELECT towar_id FROM `like` WHERE like_id = ?),?)";
-
-        $stmt = $this->conn->prepare($sqladd);
-        $stmt->bind_param("sss", $user, $like_id, $ilosc);
-        $stmt->execute();
-        if ($stmt->error) {
-            return "Bląd sql: " . $this->conn->errno . $this->conn->error;
-        }
-        $stmt->close();
-
-        $sqldeletefromlike = "DELETE FROM `like` WHERE like_id=?";
-
-        $stmtDeleteLike = $this->conn->prepare($sqldeletefromlike);
-        if ($stmtDeleteLike->error) {
-            return "Bląd sql: " . $this->conn->errno . $this->conn->error;
-        }
-        $stmtDeleteLike->bind_param("s",$like_id);
-        $stmtDeleteLike->execute();
-        $stmtDeleteLike->close();
-
-        $sqldeletefromshop = "UPDATE towary SET ilosc=ilosc-? WHERE towar_id = (SELECT towar_id FROM `like` WHERE like_id = ?)";
-
-        $stmtDeleteShop = $this->conn->prepare($sqldeletefromshop);
-        if ($stmtDeleteShop->error) {
-            return "Bląd sql: " . $this->conn->errno . $this->conn->error;
-        }
-        $stmtDeleteShop->bind_param("ss", $ilosc, $like_id);
-        $stmtDeleteShop->execute();
-        $stmtDeleteShop->close();
-
-        return "Towar został dodany do koszyka!";
     }
 
     public function removeLike($like_id)

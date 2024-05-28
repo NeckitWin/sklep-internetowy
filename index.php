@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST["towar_id"])) {
             $towar = $_POST["towar_id"];
             if (isset($_POST["addcart"])) {
-               $result = $shop->addCart();
+               $result = $shop->addCart($login, $towar);
             }
             if (isset($_POST["like"])) {
                $result = $shop->addLike($login, $towar);

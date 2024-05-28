@@ -41,6 +41,40 @@ class Shop {
         }
     }
 
+    public function addCart($user, $towar_id)
+    {
+        $ilosc = 1;
+
+        $this->conn->begin_transaction();
+
+        try {
+            $sqlcheck = "SELECT * FROM `koszyk` WHERE (SELECT id FROM users WHERE username=?) AND towar_id = ?";
+            $stmtCheck = $this->conn->prepare($sqlcheck);
+            $stmtCheck->bind_param("ss", $user, $towar_id);
+            $stmtCheck->execute();
+            $resultCheck = $stmtCheck->get_result();
+            if ($resultCheck->num_rows > 0) {
+                throw new Exception("Towar już jest w koszyku!");
+            }
+            $stmtCheck->close();
+
+            $sqladd = "INSERT INTO `koszyk` (user_id, towar_id, ilosc) VALUES ((SELECT id FROM users WHERE username=?),?,?)";
+            $stmt = $this->conn->prepare($sqladd);
+            $stmt->bind_param("sss", $user, $towar_id, $ilosc);
+            $stmt->execute();
+            if ($stmt->error) {
+                throw new Exception("Bląd sql: " . $this->conn->errno . $this->conn->error);
+            }
+            $stmt->close();
+
+            $this->conn->commit();
+            return "Towar został dodany do koszyka!";
+        } catch (Exception $e) {
+            $this->conn->rollback();
+            return $e->getMessage();
+        }
+    }
+
     public function addLike($username, $towar_id)
     {
         $sqlcheck = "SELECT * FROM `like` WHERE user_id = (SELECT id FROM users WHERE username = ?) AND towar_id = ?";
