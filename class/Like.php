@@ -44,15 +44,20 @@ WHERE user_id = (SELECT id FROM users WHERE username = ?)";
 
     public function addCart($like_id)
     {
-        $sqldelete = "DELETE FROM `like` WHERE like_id=?";
 
-        $stmt = $this->conn->prepare($sqldelete);
+        $sqladd = "INSERT INTO `koszyk` (cart_id, user_id, towar_id, ilosc) VALUES (?,?,?,())";
+
+        $stmt = $this->conn->prepare($sqladd);
         $stmt->bind_param("s", $like_id);
         $stmt->execute();
         $stmt->close();
 
-        $sqladd = "INSERT INTO";
+        $sqldelete = "DELETE FROM `like` WHERE like_id=?";
 
+        $stmt2 = $this->conn->prepare($sqldelete);
+        $stmt2->bind_param("s", $like_id);
+        $stmt2->execute();
+        $stmt2->close();
     }
 
     public function removeLike($like_id)
