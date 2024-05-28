@@ -6,10 +6,15 @@ include "./class/Like.php";
 $db = new Database();
 $conn = $db->getConnection();
 $like = new Like($conn);
+$result='';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['like_id']) && isset($_POST['removelike'])) {
-        $like->removeLike($_POST['like_id']);
+       $result = $like->removeLike($_POST['like_id']);
+    }
+
+    if (isset($_POST['like_id']) && isset($_POST['addcart'])) {
+        $result = $like->addCart($_SESSION['login'],$_POST['like_id']);
     }
 }
 ?>
@@ -41,6 +46,7 @@ include("./components/header.php");
                     echo "Musisz się załogować, żeby korzystać z tej funkcji";
                 }
             ?>
+            <?php echo "<div>{$result}</div>" ?>
         </div>
     </div>
 </main>

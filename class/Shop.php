@@ -43,23 +43,26 @@ class Shop {
 
     public function addLike($username, $towar_id)
     {
-        $sql = "INSERT INTO `like` (user_id, towar_id) 
-            VALUES ((SELECT id FROM users WHERE username = ?), ?) 
-            ON DUPLICATE KEY UPDATE towar_id = ?";
-        $stmt = $this->conn->prepare($sql);
-        if ($stmt === false) {
-            return "Bląd: " . $this->conn->error;
-        }
-        $stmt->bind_param("sss", $username, $towar_id, $towar_id);
-        $stmt->execute();
-        $stmt->close();
-
-        if ($this->conn->affected_rows > 0) {
-            return "Towar został dodany do polubionych!";
-        } else {
+        $sqlcheck = "SELECT * FROM `like` WHERE user_id = (SELECT id FROM users WHERE username = ?) AND towar_id = ?";
+        $stmtCheck = $this->conn->prepare($sqlcheck);
+        $stmtCheck->bind_param("ss", $username, $towar_id);
+        $stmtCheck->execute();
+        $resultCheck = $stmtCheck->get_result();
+        if ($resultCheck->num_rows > 0) {
             return "Towar już czeka w polubionych!";
         }
-    }
+        $stmtCheck->close();
 
+        $sqladd = "INSERT INTO `like` (user_id, towar_id) VALUES ((SELECT id FROM users WHERE username = ?), ?)";
+        $stmt = $this->conn->prepare($sqladd);
+        $stmt->bind_param("ss", $username, $towar_id);
+        $stmt->execute();
+        if ($stmt->error) {
+            return "Bląd: " . $this->conn->error;
+        }
+        $stmt->close();
+
+        return "Towar został dodany do polubionych!";
+    }
 }
 ?>
