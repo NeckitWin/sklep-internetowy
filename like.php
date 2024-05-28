@@ -6,6 +6,12 @@ include "./class/Like.php";
 $db = new Database();
 $conn = $db->getConnection();
 $like = new Like($conn);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['like_id']) && isset($_POST['removelike'])) {
+        $like->removeLike($_POST['like_id']);
+    }
+}
 ?>
 <!doctype html>
 <html lang="pl">
