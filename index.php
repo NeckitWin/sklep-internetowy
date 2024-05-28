@@ -6,7 +6,7 @@ include "./class/Shop.php";
 $db = new Database();
 $conn = $db->getConnection();
 $shop = new Shop($conn);
-$result='';
+$result = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_SESSION["login"])) {
@@ -14,10 +14,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST["towar_id"])) {
             $towar = $_POST["towar_id"];
             if (isset($_POST["addcart"])) {
-               $result = $shop->addCart($login, $towar);
+                $result = $shop->addCart($login, $towar);
             }
             if (isset($_POST["like"])) {
-               $result = $shop->addLike($login, $towar);
+                $result = $shop->addLike($login, $towar);
             }
         } else {
             $result = "Wyskoczył bląd. Spróbuj ponownie.";
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-if ($result!='') {
+if ($result != '') {
     echo "<script>alert('{$result}');</script>";
 }
 
@@ -47,9 +47,18 @@ if ($result!='') {
 <?php include("./components/header.php"); ?>
 
 <main>
+    <form method="GET" action="index.php" class="search">
+        <input type="text" name="searchTerm" placeholder="Search for products...">
+        <input type="submit" value="Search">
+    </form>
     <div class="towary">
         <?php
-            echo $shop->displayProducts();
+//        echo $shop->displayProducts();
+
+
+        $searchTerm = isset($_GET['searchTerm']) ? $_GET['searchTerm'] : null;
+        echo $shop->displayProducts($searchTerm);
+
         ?>
     </div>
 </main>

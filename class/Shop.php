@@ -7,17 +7,26 @@ class Shop {
         $this->conn = $conn;
     }
 
-    public function displayProducts()
+    public function displayProducts($searchTerm = null)
     {
         $sql = "SELECT towar_id, avatar, username, nazwa, cena, img, ilosc, opis FROM towary INNER JOIN users ON towary.wlasciciel_id = users.id";
+
+        if ($searchTerm) {
+            $sql .= " WHERE nazwa LIKE ?";
+            $searchTerm = "%".$searchTerm."%";
+        }
 
         $stmt = $this->conn->prepare($sql);
         if ($stmt === false) {
             die("Bląd sql: " . $this->conn->errno . $this->conn->error);
         }
+
+        if ($searchTerm) {
+            $stmt->bind_param("s", $searchTerm);
+        }
+
         $stmt->execute();
         $result = $stmt->get_result();
-
         while ($row = $result->fetch_assoc()) {
 
             $avatar='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
